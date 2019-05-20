@@ -6,7 +6,7 @@
         <remote-mappings server-id="python@sftp://yangyang@192.168.123.39:22/home/yangyang/anaconda3/bin/python">
           <settings>
             <list>
-              <mapping local-root="$PROJECT_DIR$" remote-root="/home/yangyang/PycharmProjects/CRNN" />
+              <mapping local-root="$PROJECT_DIR$" remote-root="/home/yangyang/PycharmProjects/CRNN_mapping_baseline" />
             </list>
           </settings>
         </remote-mappings>

@@ -3,14 +3,13 @@ import os
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
-import torch.nn as nn
 import soundfile as sf
 from scipy.io import loadmat
 from utils.util import get_alpha
 from utils.pesq import pesq
 from utils.stft_istft import STFT
 import torch
-from torch.autograd import Variable
+from config import *
 from net.module import CRNN
 from load_data.SpeechDataLoad import SpeechDataset, SpeechDataLoader, FeatureCreator
 from utils.loss_set import LossHelper
@@ -30,10 +29,8 @@ def validation(path, net):
     files = os.listdir(path)
     pesq_unprocess = 0
     pesq_res = 0
-    stoi_unprocess = 0
-    stoi_res = 0
     bar = progressbar.ProgressBar(0, len(files))
-    stft = STFT(filter_length=320, hop_length=160)
+    stft = STFT(filter_length=FILTER_LENGTH, hop_length=HOP_LENGTH)
     for i in range(len(files)):
         bar.update(i)
         with torch.no_grad():
@@ -49,10 +46,6 @@ def validation(path, net):
             speech *= c
             noise *= c
 
-
-            # c = get_alpha(mix)
-            # speech *= c
-            # mix *= c
             speech = stft.transform(torch.Tensor(speech.T).cuda())
             mix = stft.transform(torch.Tensor(mix.T).cuda())
             noise = stft.transform(torch.Tensor(noise.T).cuda())
@@ -87,7 +80,6 @@ def validation(path, net):
             pesq_unprocess += p1[0]
             pesq_res += p2[0]
 
-        # p2 = pesq()
     bar.finish()
     net.train()
     return [pesq_unprocess / len(files), pesq_res / len(files)]
@@ -135,8 +127,8 @@ if __name__ == '__main__':
                                    is_shuffle=True)
 
     module = CRNN()
-    module = module.cuda()
+    module = module.cuda(CUDA_ID[0])
     # loss_fun = torch.nn.MSELoss()
-    optimizer = optim.Adam(module.parameters(), lr=0.001)
+    optimizer = optim.Adam(module.parameters(), lr=LR)
     loss_helper = LossHelper()
     train(module, optimizer, data_loader, loss_helper, EPOCH)

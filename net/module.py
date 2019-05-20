@@ -25,7 +25,6 @@ class CRNN(nn.Module):
         self.LSTM1 = nn.LSTM(input_size=1024, hidden_size=1024, num_layers=2, batch_first=True)
 
         # Decoder
-        # TODO output_padding 补零
         self.convT1 = nn.ConvTranspose2d(in_channels=512, out_channels=128, kernel_size=(1, 3), stride=(1, 2))
         self.bnT1 = nn.BatchNorm2d(num_features=128)
         self.convT2 = nn.ConvTranspose2d(in_channels=256, out_channels=64, kernel_size=(1, 3), stride=(1, 2))
@@ -40,8 +39,6 @@ class CRNN(nn.Module):
 
     def forward(self, x):
         # conv
-        # x0 = self.conv1(x)
-        # print(x0.shape)
         # (B, in_c, T, F)
         x1 = F.elu(self.bn1(self.conv1(x)))
         x2 = F.elu(self.bn2(self.conv2(x1)))
@@ -50,9 +47,7 @@ class CRNN(nn.Module):
         x5 = F.elu(self.bn5(self.conv5(x4)))
         # reshape
         out5 = x5.permute(0, 2, 1, 3)
-        temp = out5.size()[0]
         out5 = out5.reshape(out5.size()[0], out5.size()[1], -1)
-        # out5 = out5.permute(1, 0, 2).cuda()
         # lstm
 
         lstm, (hn, cn) = self.LSTM1(out5)

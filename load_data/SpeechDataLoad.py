@@ -1,7 +1,6 @@
 import os
 import torch
 import numpy as np
-import librosa
 import torch.nn as nn
 from scipy.io import loadmat
 from utils.util import get_alpha
@@ -141,7 +140,7 @@ class SpeechDataset(Dataset):
         :return: IRM
         """
 
-        return torch.pow(s.pow(2) / (s.pow(2) + n.pow(2)), 0.5)
+        return torch.pow(s.pow(2) / (s.pow(2) + n.pow(2) + EPSILON), 0.5)
 
     def cal_PSM(self, s, y):
         """
@@ -150,12 +149,11 @@ class SpeechDataset(Dataset):
         :param y: 带噪语音，complex，即librosa.stft(s + n)
         :return: clip到（0，1）,shape(T,B,F)
         """
-        # TODO 除0检测
         s_real = s[:, :, :, 0]
         s_imag = s[:, :, :, 1]
         y_real = y[:, :, :, 0]
         y_imag = y[:, :, :, 1]
-        return ((s_real * y_real + s_imag * y_imag) / (y_real ** 2 + y_imag ** 2)).clamp(0, 1).squeeze()
+        return ((s_real * y_real + s_imag * y_imag) / (y_real ** 2 + y_imag ** 2 + EPSILON)).clamp(0, 1).squeeze()
 
 
 class BatchInfo(object):
@@ -184,9 +182,7 @@ class FeatureCreator(nn.Module):
 
         mix_mag = torch.sqrt(mix_real ** 2 + mix_imag ** 2)
         mix_mag = mix_mag.unsqueeze(1)
-        # 防止除零
         label = self.label_helper(speech_spec, noise_spec)
-        # 验证label
 
         return mix_mag, label, batch_info.nframe
 

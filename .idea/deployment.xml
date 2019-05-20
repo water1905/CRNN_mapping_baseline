@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="CRNN">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="CRNN_mapping_baseline">
     <serverData>
-      <paths name="CRNN">
+      <paths name="CRNN_mapping_baseline">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/yangyang/PycharmProjects/CRNN" local="$PROJECT_DIR$" />
+            <mapping deploy="/home/yangyang/PycharmProjects/CRNN_mapping_baseline" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
