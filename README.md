@@ -8,10 +8,10 @@
 * #### 项目结构
 
   ```
-  - load_data				          # 数据预处理
-  - net					              # 网络定义
-  - recovery			              # 恢复语音
-  - test			                  # 测试模块
+  - load_data                         # 数据预处理
+  - net                               # 网络定义
+  - recovery                          # 恢复语音
+  - test                              # 测试模块
   - utils			          
-  - logs					           # tensorboard 日志文件
+  - logs                              # tensorboard 日志文件
   ```
