@@ -8,6 +8,7 @@
 * #### 项目结构
 
   ```
+  - evluation                         # 通过pesq或stoi等指标来评价模型好坏
   - load_data                         # 数据预处理
   - net                               # 网络定义
   - recovery                          # 恢复语音

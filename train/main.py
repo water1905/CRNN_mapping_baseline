@@ -107,8 +107,9 @@ def train(net, optim, data_loader, loss_helper, epoch):
                 writer.add_scalar('Train/loss', sum_loss / 100, global_step)
                 sum_loss = 0
             # 验证集
-            if batch_idx % 1000 == 0:
+            if batch_idx % 1000 == 0 and batch_idx != 0:
                 base_pesq, res_pesq = validation(VALIDATION_DATA_PATH, net)
+                torch.save(net, MODEL_STORE + 'model_' + str(i) + '.pkl')
                 writer.add_scalar('Train/base_pesq', base_pesq, global_step)
                 writer.add_scalar('Train/res_pesq', res_pesq, global_step)
             global_step += 1
