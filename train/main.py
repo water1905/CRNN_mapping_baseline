@@ -46,9 +46,9 @@ def validation(path, net):
             speech *= c
             noise *= c
 
-            speech = stft.transform(torch.Tensor(speech.T).cuda())
-            mix = stft.transform(torch.Tensor(mix.T).cuda())
-            noise = stft.transform(torch.Tensor(noise.T).cuda())
+            speech = stft.transform(torch.Tensor(speech.T).cuda(CUDA_ID[0]))
+            mix = stft.transform(torch.Tensor(mix.T).cuda(CUDA_ID[0]))
+            noise = stft.transform(torch.Tensor(noise.T).cuda(CUDA_ID[0]))
 
             mix_real = mix[:, :, :, 0]
             mix_imag = mix[:, :, :, 1]
@@ -56,7 +56,7 @@ def validation(path, net):
 
 
             # mix_(T,F)
-            mix_mag = mix_mag.unsqueeze(0).cuda()
+            mix_mag = mix_mag.unsqueeze(0).cuda(CUDA_ID[0])
             # output(1, T, F)
 
             mapping_out = net(mix_mag)

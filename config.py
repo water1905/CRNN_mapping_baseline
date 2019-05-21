@@ -18,7 +18,7 @@ VALIDATION_DATA_PATH = '/home/yangyang/userspace/data/envaluation_1/'
 TEST_DATA_PATH = '/mnt/raid/data/public/SPEECH_ENHANCE_DATA_NEW/tt/mix/'
 
 # model
-MODEL_STORE = os.path.join('/home/yangyang/userspace/module_store/', PROJECT_NAME + '/')
+MODEL_STORE = os.path.join('/home/yangyang/userspace/module_store/tmp/', PROJECT_NAME + '/')
 if not os.path.exists(MODEL_STORE):
     os.mkdir(MODEL_STORE)
     print('Create model store file  successful!\n'
@@ -27,7 +27,7 @@ else:
     print('The model store path: {}'.format(MODEL_STORE))
 
 # log
-LOG_STORE = os.path.join('/home/yangyang/userspace/log/', PROJECT_NAME + '/')
+LOG_STORE = os.path.join('/home/yangyang/userspace/log/tmp/', PROJECT_NAME + '/')
 if not os.path.exists(LOG_STORE):
     os.mkdir(LOG_STORE)
     print('Create log store file  successful!\n'
@@ -49,4 +49,4 @@ FILTER_LENGTH = 320
 HOP_LENGTH = 160
 
 EPSILON = 1e-7
-CUDA_ID = ['cuda:0']
+CUDA_ID = ['cuda:1']

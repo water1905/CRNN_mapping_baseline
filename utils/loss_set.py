@@ -1,5 +1,6 @@
 import torch
 from torch.nn.utils.rnn import pad_sequence
+from config import *
 
 
 class LossHelper(object):
@@ -19,9 +20,9 @@ class LossHelper(object):
                 mask_for_loss_list.append(torch.ones(frame_num, label.size()[2], dtype=torch.float32))
             # input: list of tensor
             # output: B T F
-            mask_for_loss = pad_sequence(mask_for_loss_list, batch_first=True).cuda()
+            mask_for_loss = pad_sequence(mask_for_loss_list, batch_first=True).cuda(CUDA_ID[0])
         # 使用掩码计算真实值
         masked_est = est * mask_for_loss
         masked_label = label * mask_for_loss
-        loss = ((masked_est - masked_label) ** 2).sum() / mask_for_loss.sum()
+        loss = ((masked_est - masked_label) ** 2).sum() / mask_for_loss.sum() + EPSILON
         return loss

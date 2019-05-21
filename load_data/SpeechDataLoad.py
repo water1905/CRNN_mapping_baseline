@@ -88,7 +88,7 @@ class SpeechDataset(Dataset):
         c = get_alpha(mix)
         speech *= c
         mix *= c
-
+        # 计算帧长
         nframe = (len(speech) - FILTER_LENGTH) // HOP_LENGTH + 1
         # len_speech = nframe * HOP_LENGTH
         # speech = speech[:len_speech, :]
@@ -128,7 +128,7 @@ class SpeechDataset(Dataset):
         :param transform: 暂时未用
         """
         # 初始化变量
-        self.stft = STFT(filter_length=320, hop_length=160)
+        self.stft = STFT(filter_length=FILTER_LENGTH, hop_length=HOP_LENGTH)
         self.root_dir = root_dir
         self.files = os.listdir(root_dir)
 
@@ -169,10 +169,14 @@ class FeatureCreator(nn.Module):
 
     def __init__(self):
         super(FeatureCreator, self).__init__()
-        self.stft = STFT(FILTER_LENGTH, HOP_LENGTH)
+        self.stft = STFT(FILTER_LENGTH, HOP_LENGTH).cuda(CUDA_ID[0])
         self.label_helper = LabelHelper()
 
     def forward(self, batch_info):
+        batch_info.mix = batch_info.mix.cuda(CUDA_ID[0])
+        batch_info.speech = batch_info.speech.cuda(CUDA_ID[0])
+        batch_info.noise = batch_info.noise.cuda(CUDA_ID[0])
+
         mix_spec = self.stft.transform(batch_info.mix)
         speech_spec = self.stft.transform(batch_info.speech)
         noise_spec = self.stft.transform(batch_info.noise)

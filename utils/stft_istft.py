@@ -20,14 +20,15 @@ class STFT(torch.nn.Module):
         cutoff = int((self.filter_length / 2 + 1))
         fourier_basis = np.vstack([np.real(fourier_basis[:cutoff, :]),
                                    np.imag(fourier_basis[:cutoff, :])])
-        forward_basis = torch.FloatTensor(fourier_basis[:, None, :]).cuda()
+        forward_basis = torch.FloatTensor(fourier_basis[:, None, :])
+        forward_basis = torch.FloatTensor(fourier_basis[:, None, :])
 
         inv_fourier_basis = np.fft.fft(np.eye(self.filter_length))
         inv_fourier_basis = inv_fourier_basis / window
         cutoff = int((self.filter_length / 2 + 1))
         inv_fourier_basis = np.vstack([np.real(inv_fourier_basis[:cutoff, :]),
                                        np.imag(inv_fourier_basis[:cutoff, :])])
-        inverse_basis = torch.FloatTensor(np.linalg.pinv(inv_fourier_basis).T[:, None, :]).cuda()
+        inverse_basis = torch.FloatTensor(np.linalg.pinv(inv_fourier_basis).T[:, None, :])
 
         self.register_buffer('forward_basis', forward_basis.float())
         self.register_buffer('inverse_basis', inverse_basis.float())

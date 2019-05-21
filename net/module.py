@@ -64,7 +64,6 @@ class CRNN(nn.Module):
         res3 = torch.cat((res3, x2), 1)
         res4 = F.elu(self.bnT4(self.convT4(res3)))
         res4 = torch.cat((res4, x1), 1)
-
         # (B, o_c, T. F)
-        res5 = torch.relu(self.bnT5(self.convT5(res4)))
+        res5 = F.relu(self.bnT5(self.convT5(res4)))
         return res5.squeeze()
